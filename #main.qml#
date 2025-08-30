@@ -1,0 +1,61 @@
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Layouts
+import Qt.labs.platform
+import QtQuick.Controls.Material
+
+
+
+ApplicationWindow {
+		  visible: true
+    		  width: 1024
+    		  height: 800
+    		  title: "Convertidor a Escala de Grises"
+		  
+		  palette: Palette {
+		  	   window: "lightblue"
+			   text: "black"
+			   button: "darkblue"
+			   buttonText: "white"
+			   disabled: Palette.Disabled {
+			   buttonText: "gray"
+        }
+    //readonly property list<string> texts: ["Hola Chicuelo, da click abajo para seleccionar la imagen que quieres convertir a escala de grises"]
+
+    //function setText() { #sustituir con una función de python con open cv y probablemente por fuera un installer.sh 
+      //  text.text = texts[0]
+      
+      ColumnLayout {
+      		   anchors.fill:  parent
+		   
+
+
+		   Text {
+		   	id: text
+            		text: "Hola Chicuelo, da click abajo para seleccionar la imagen que quieres convertir a escala de grises"
+            		Layout.alignment: Qt.AlignHCenter
+			}
+		Button {
+		       text: "Dame un click para comenzar"
+            	       Layout.alignment: Qt.AlignHCenter
+            	       onClicked: buscadorArchivos.open()
+        	       }
+		       
+		       }
+    FileDialog{
+	id: buscadorArchivos
+    	title: "Busca y seleccina la imagen plis"
+    	nameFilters: ["Imágenes (*.png *.jpg *jpeg)"] //aqui creo que van los .algo q voy a permitir que vea el usuario
+    	onAccepted: {
+		    console.log("Seleccionaste-> ", buscadorArchivos.file)
+		    modulos.convertir(buscadorArchivos.file)
+    		
+    		}
+    }
+    Connections{
+	target: modulos
+	function onProcesado(msj){
+		 mensaje.text = msj
+	}
+    }
+}
